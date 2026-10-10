@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: review-reply
+execution:
+  max_turns: 6
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    Draft replies to these two Google reviews for my business, Ridge Roofing (I'm Pat):
+    1) 5 stars, Maria: "Crew fixed our leak the same day and cleaned up everything."
+    2) 2 stars, Tom: "Showed up two hours late and nobody called."
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?review-reply"'
+  - name: no-incentive
+    type: regex
+    pattern: "(gift card|free service|coupon|in exchange)"
+    flags: i
+    match: not_contains
+  - name: handles-negative
+    type: llm
+    criteria: "Maria's reply thanks her and mentions the same-day leak fix; Tom's reply acknowledges the late arrival without arguing and invites him to contact Pat directly. Each reply is under about 80 words."

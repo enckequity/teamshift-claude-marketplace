@@ -1,0 +1,22 @@
+schema_version: "1.1"
+name: sop-from-recording
+execution:
+  max_turns: 6
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    Turn this narrated recording transcript into an SOP:
+    "Every Monday I open Gmail and search the label Bills. I download each PDF. Then I go to QuickBooks and click New, then Bill. Make sure the total matches the invoice. If the vendor isn't listed I ask Dana first. I never pay from here. Then I save the bill."
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?sop-from-recording"'
+  - name: numbered-steps
+    type: regex
+    pattern: "1\\.[^\\n]*Gmail"
+    flags: i
+    match: contains
+  - name: faithful
+    type: llm
+    criteria: "The numbered Steps contain only actions the transcript narrates, in order (Gmail Bills label, download PDFs, QuickBooks New then Bill, save), with no invented step such as 'repeat for each' or 'fill in the fields'. The total check sits under a step, the unlisted-vendor case is an exception and 'never pay from here' is a rule. The skill's own sections (Context, Approval points, Fresh-input test, Questions for the owner) are expected and are not invented steps."

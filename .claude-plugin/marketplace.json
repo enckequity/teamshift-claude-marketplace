@@ -1,0 +1,12 @@
+{
+  "name": "teamshift-reference",
+  "owner": { "name": "TeamShift" },
+  "description": "Reference private marketplace for the Claude for your team rollout (#6261). Copy into the client's private repo and replace the skills with theirs.",
+  "plugins": [
+    {
+      "name": "teamshift-small-business",
+      "source": "./plugins/teamshift-small-business",
+      "description": "Quote follow-up, review replies and SOPs from narrated recordings, for small-business owners."
+    }
+  ]
+}

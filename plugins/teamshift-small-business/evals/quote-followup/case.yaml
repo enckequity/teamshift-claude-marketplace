@@ -1,0 +1,24 @@
+schema_version: "1.1"
+name: quote-followup
+execution:
+  max_turns: 6
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    These quotes went quiet. Draft my follow-ups. I'm Pat at Ridge Roofing.
+    - Dana, roof repair, $1,850, sent 2 days ago, no reply
+    - Sam, full replacement, $14,200, sent 11 days ago, no reply
+    - Lee, gutter guards, $640, sent 5 days ago, Lee replied "we went with someone else"
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?quote-followup"'
+  - name: keeps-prices
+    type: regex
+    pattern: "(discount|% off|lower the price)"
+    flags: i
+    match: not_contains
+  - name: closes-lee
+    type: llm
+    criteria: "Lee is not given a follow-up (they declined) and Sam's draft asks whether to keep the quote open or close it out. Prices are not changed."

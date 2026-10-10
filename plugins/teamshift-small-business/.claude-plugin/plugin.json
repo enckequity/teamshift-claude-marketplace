@@ -1,0 +1,8 @@
+{
+  "name": "teamshift-small-business",
+  "version": "1.0.0",
+  "description": "Quote follow-up, review replies and SOPs from narrated recordings, for small-business owners.",
+  "author": { "name": "TeamShift" },
+  "license": "MIT",
+  "keywords": ["small business", "quotes", "reviews", "sop"]
+}
